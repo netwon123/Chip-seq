@@ -13,8 +13,8 @@
 --extsize： MACS使用这个参数将read以5'-> 3'衍生至等长片段。比如说你知道你的转录因子的结合区域是200bp，那么参数就是--extsize 200。当且仅当--nomodel和--fix-bimodal设置使用。
 --shift: 这个参数是绝对的偏移值，会先于--extsize前对read进行整体移动。MACS会通过建模的方式自动计算出read需要偏移的距离，除非你对自己的数据非常了解，或者前期研究都表明结合中心在read后面的那个位置上，你才能比较放心的用这个这个参数了。正数表示从5'往3'偏移延长到片段中心，如果是负数则是3'往5'偏移延长到片段中心。作者给了几个例子：
 
-> 如果是ChIP-seq数据，设置·--shift 0`
-> 如果是DNase-Seq数据：read来自于两个核小体中间，你想把测序read往两边延长用来平滑pileup信号，并且希望用来平滑的窗口是200bp,那么使用`--nomodel --shift -100 --extsize 200'.
-> 如果是nucleosome-seq数据：因为一个核小体大概有147bp DNA缠绕，于是就需要用半个核小体长度进行堆积(pipleup)用于小波分析。参数为--nomodel --shift 37 --extsize 73.
+如果是ChIP-seq数据，设置·--shift 0
+如果是DNase-Seq数据：read来自于两个核小体中间，你想把测序read往两边延长用来平滑pileup信号，并且希望用来平滑的窗口是200bp,那么使用--nomodel --shift -100 --extsize 200
+如果是nucleosome-seq数据：因为一个核小体大概有147bp DNA缠绕，于是就需要用半个核小体长度进行堆积(pipleup)用于小波分析。参数为--nomodel --shift 37 --extsize 73
 
 #DNase-Seq是用MNase或DNase I内切酶识别开放染色质区域，把切割完的DNA测序，和已知的全基因组序列进行比对，就知道被切掉了哪里，哪里没有被切掉，从而检测出开放的染色质区域。但是实验费时费力，重复性差
