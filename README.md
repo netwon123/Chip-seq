@@ -20,3 +20,10 @@
 >如果是nucleosome-seq数据：因为一个核小体大概有147bp DNA缠绕，于是就需要用半个核小体长度进行堆积(pipleup)用于小波分析。参数为--nomodel --shift 37 --extsize 73
 
 #DNase-Seq是用MNase或DNase I内切酶识别开放染色质区域，把切割完的DNA测序，和已知的全基因组序列进行比对，就知道被切掉了哪里，哪里没有被切掉，从而检测出开放的染色质区域。但是实验费时费力，重复性差
+
+
+https://zhuanlan.zhihu.com/p/512163334#:~:text=%E8%80%8CATAC-seq%E5%BB%BA%E6%A8%A1%E7%9A%84%E6%97%B6%E5%80%99%E4%B9%9F%E9%9C%80%E8%A6%81shift%EF%BC%8C%E4%BD%BF%E4%B8%A4%E4%B8%AA%E2%80%9C%E7%9B%B8%E9%82%BB%E2%80%9D%E7%9A%84%E5%B3%B0shift%E6%88%90%E4%B8%80%E4%B8%AA%E5%B3%B0%EF%BC%8C%E4%BD%86%E6%98%AF%E8%A6%81%E5%BE%80%E4%B8%A4%E8%BE%B9shift.%20%E4%BB%A5%E4%B8%8B%E5%9B%BECTCF%E4%B8%BA%E4%BE%8B%EF%BC%8CChIP-seq%E7%9A%84%E5%B3%B0%E5%B0%B1%E6%98%AFCTCF%E7%9A%84%E7%BB%93%E5%90%88%E5%8C%BA%E5%9F%9F%EF%BC%8C%E4%B8%AD%E9%83%A8%E4%BD%8D%E7%BD%AE%E4%B8%BACTCF%E7%9A%84motif%EF%BC%8C%20%E8%80%8C,ATAC-seq%E7%9A%84reads%E5%AF%8C%E9%9B%86%E5%9C%A8motif%E4%B8%A4%E7%AB%AF%EF%BC%8C%E6%A8%AA%E5%90%91%E4%BB%A3%E8%A1%A8%E5%9F%BA%E5%9B%A0%E7%BB%84%E5%9D%90%E6%A0%87%2C%20%E7%BA%B5%E5%90%91%E4%BB%A3%E8%A1%A8ATAC-seq%E7%9A%84%E4%BF%A1%E5%8F%B7%E5%BC%BA%E5%BA%A6%20%E3%80%82
+https://blog.csdn.net/weixin_43569478/article/details/108079774
+https://www.jianshu.com/p/6a975f0ea65a
+https://blog.csdn.net/weixin_43569478/article/details/108079812
+https://www.jianshu.com/p/96688fecd864
