@@ -1,0 +1,36 @@
+#---QC----不对长度进行过滤，使用-L
+#fastqc -t 8 *.fq.gz -o ./
+#fastp -w 8 -L -i 180-EP300_1.fq.gz -o 180-EP300_1_clean2.fq.gz -I 180-EP300_2.fq.gz -O 180-EP300_2_clean2.fq.gz
+#fastp -w 8 -L -i 180-EZH2_1.fq.gz -o 180-EZH2_1_clean2.fq.gz -I 180-EZH2_2.fq.gz -O 180-EZH2_2_clean2.fq.gz
+#fastqc -t 8 *clean2.fq.gz -o ./
+
+#---比对----
+#bowtie2-build genome/Duroc.fna genome/Duroc
+#bowtie2 -p 16 -q -X 1000 --dovetail --no-unal --very-sensitive-local --no-mixed --no-discordant \
+#-x genome/Duroc -1 180-EP300_1_clean2.fq.gz -2 180-EP300_2_clean2.fq.gz 2>EP300.alignment.summary | samtools view -F 4 -u - | samtools sort -@ 16 -o EP300.bam
+
+#bowtie2 -p 16 -q -X 1000 --dovetail --no-unal --very-sensitive-local --no-mixed --no-discordant \
+#-x genome/Duroc -1 180-EZH2_1_clean2.fq.gz -2 180-EZH2_2_clean2.fq.gz 2>180-EZH2.alignment.summary | samtools view -F 4 -u - | samtools sort -@ 16 -o EZH2.bam
+#samtools view EP300.bam |  awk -F'\t' 'function abs(x){return ((x < 0.0) ? -x : x)} {print $1"\t"abs($9)}' |  sort | uniq | cut -f2 > EP300_fragment.length.txt
+#samtools view EZH2.bam |  awk -F'\t' 'function abs(x){return ((x < 0.0) ? -x : x)} {print $1"\t"abs($9)}' |  sort | uniq | cut -f2 > EZH2_fragment.length.txt
+
+#---去重----
+#ava -jar ~/software/picard.jar MarkDuplicates -I ../EP300.bam -O EP300.rmdup.bam --REMOVE_SEQUENCING_DUPLICATES true -M EP300.log
+#ava -jar ~/software/picard.jar MarkDuplicates -I ../EZH2.bam -O EZH2.rmdup.bam --REMOVE_SEQUENCING_DUPLICATES true -M EZH2.log
+
+#---去线粒体----
+#amtools view -h EP300.rmdup.bam | grep -v 'NC_000845.1' | samtools view -bS -o EP300.rmdup.rmM.bam
+#amtools view -h EZH2.rmdup.bam | grep -v 'NC_000845.1' | samtools view -bS -o EZH2.rmdup.rmM.bam
+
+#---no model---
+macs3 callpeak -g 2533271056 -t EP300.rmdup.rmM.bam -f BAMPE -n EP300 -B --SPMR --keep-dup all --nomodel --extsize 163
+macs3 callpeak -g 2533271056 -t EZH2.rmdup.rmM.bam -f BAMPE -n EZH2 -B --SPMR --keep-dup all --nomodel --extsize 129
+#163 129 macs2 predictd -i input.bam
+
+#假如是处理对照组，只有1个样本，可使用bdgdiff
+#macs3 bdgdiff --t1 EP300_treat_pileup.bdg --c1 EP300_control_lambda.bdg --t2 EZH2_control_lambda.bdg --c2 EZH2_control_lambda.bdg --d1 14035853 --d2 14008704 --o-prefix EP300_EZH2
+
+#cal fpip
+#bedtools bamtobed -i EP300.rmdup.rmM.bam > EP300.rmdup.rmM.bed
+#bedtools bamtobed -i EZH2.rmdup.rmM.bam > EZH2.rmdup.rmM.bed
+bash cal_FRiP.sh
