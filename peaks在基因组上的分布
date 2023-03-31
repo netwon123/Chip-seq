@@ -4,3 +4,6 @@ peak.gr <- readPeakFile("~/3_macs/sample_peaks.narrowPeak", as="GRanges")
 pdf("Figure1.sample_distribution of peaks in chrs.pdf")
 covplot(peak.gr, weightCol="V5")
 #covplot(peak.gr, weightCol="V5", chrs=c("chr17", "chr18"), xlim=c(4.5e7, 5e7)) #chr17 chr18上的peaks
+
+
+![image](https://upload-images.jianshu.io/upload_images/18509515-f4a145648d98e97a.png?imageMogr2/auto-orient/strip|imageView2/2/format/webp)
