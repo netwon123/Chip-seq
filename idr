@@ -1,0 +1,1 @@
+idr  --samples PT55D-EZH2_sort.bam.rmdup.bam.rmM.bam PT55D-2-EZH2_sort.bam.rmdup.bam.rmM.bam --input-file-type narrowPeak --rank signal.value --output-file pt55-idr --plot --log-output-file pt55.idr.log
