@@ -23,8 +23,9 @@
 #amtools view -h EZH2.rmdup.bam | grep -v 'NC_000845.1' | samtools view -bS -o EZH2.rmdup.rmM.bam
 
 #---no model---
-macs3 callpeak -g 2533271056 -t EP300.rmdup.rmM.bam -f BAMPE -n EP300 -B --SPMR --keep-dup all --nomodel --extsize 163
-macs3 callpeak -g 2533271056 -t EZH2.rmdup.rmM.bam -f BAMPE -n EZH2 -B --SPMR --keep-dup all --nomodel --extsize 129
+#在peak calling时，需要添加-B参数，这样才可以输出样本对应的bedgraph文件，同时需要保证peak  calling时采用一致的--extsize的值，就是第一步预测出来的数值，取多个样本的均值即可。官方也给出了推荐值，对于大多数的转录因子chip_seq数据，推荐值为200， 对于大部分组蛋白修饰的chip_seq数据，推荐值为147
+macs3 callpeak -g 2533271056 -t EP300.rmdup.rmM.bam -f BAMPE -n EP300 -B --SPMR --keep-dup all --nomodel --extsize 200
+macs3 callpeak -g 2533271056 -t EZH2.rmdup.rmM.bam -f BAMPE -n EZH2 -B --SPMR --keep-dup all --nomodel --extsize 200
 #163 129 macs2 predictd -i input.bam
 
 #假如是处理对照组，只有1个样本，可使用bdgdiff
