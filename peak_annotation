@@ -1,0 +1,53 @@
+setwd('G:/博士/project_qu/diff-ep300')
+
+library("ChIPseeker")
+library("GenomicFeatures")
+
+# 利用gff文件制作注释
+ara_TxDb <- makeTxDbFromGFF('G:/博士/project_qu/bam/Sus_scrofa.Sscrofa11.1.110.chr.gff3',format=c("gff3"))
+## 设置工作目录
+
+## 获取该文件夹（C:/Users/xuyu/Desktop/atac_data/atac_peak/）下所有的narrowPeak文件名
+files <- list.files(pattern = "*.narrowPeak")
+files_list <- as.list(c('PT55D-2-EZH2_sort.bam.rmdup.bam.rmM.bam_peaks.narrowPeak',
+                        'PT55D-EZH2_sort.bam.rmdup.bam.rmM.bam_peaks.narrowPeak',
+                        '30D-2-EZH2_sort.bam.rmdup.bam.rmM.bam_peaks.narrowPeak',
+                        '30D-EZH2_sort.bam.rmdup.bam.rmM.bam_peaks.narrowPeak',
+                        '90D-2-EZH2_sort.bam.rmdup.bam.rmM.bam_peaks.narrowPeak',
+                        '90D-EZH2_sort.bam.rmdup.bam.rmM.bam_peaks.narrowPeak'
+                        ))
+names(files_list) <- c('PT55D-2-EZH2','PT55D-EZH2','30D-2-EZH2','30D-EZH2','90D-2-EZH2','90D-EZH2')
+
+## 对peak进行注释
+peakAnnoList <- lapply(files_list, annotatePeak, TxDb=ara_TxDb,
+                       tssRegion=c(-3000, 3000), verbose=FALSE)
+
+## 可视化多个样本peak和TSS之间距离的分布（见图38）
+plotDistToTSS(peakAnnoList,ylab = "Opening sites (%) (5'->3')",
+              title = paste0("Distribution of opening loci relative to TSS"))
+peakHeatmap(files_list, weightCol="V5", TxDb=ara_TxDb, 
+            upstream=1000, downstream=1000, 
+            color=c("#8ECFC9", "#82B0D2", "#FA7F6F", "#FFBE7A","#BEB8DC","#E7DAD2"))
+
+#注释
+peakAnno=annotatePeak(peak='90D-EZH2_sort.bam.rmdup.bam.rmM.bam_peaks.narrowPeak',tssRegion =c(-3000,3000),TxDb=ara_TxDb,assignGenomicAnnotation = TRUE)
+pealresult=as.data.frame(peakAnno@anno)
+write.table(pealresult,file='90D-EZH2_peaks.peakAnno.tsv',sep = '\t',row.names = FALSE)
+plotAnnoPie(peakAnno)
+
+#对交集peak进行注释
+library("ChIPseeker")
+library("GenomicFeatures")
+setwd('G:/博士/ATAC/peak_file/差异peak/')
+# 利用gff文件制作注释
+ara_TxDb <- makeTxDbFromGFF('G:/博士/ATAC/peak_file/GCF_000003025.6_Sscrofa11.1_genomic.gff',format=c("gff3"))
+## 设置工作目录
+
+peak=readPeakFile(peakfile ='ep300-py55_0d_c3.0_cond2.bed')
+peakAnoo=annotatePeak(
+  peak=peak,
+  tssRegion = c(-3000,3000),
+  TxDb = ara_TxDb)
+RESUT=as.data.frame(peakAnoo@anno)
+write.table(RESUT,file='ep300-py55_0d_c3.0_cond2.peakAnno.tsv',sep = '\t',row.names = FALSE)
+plotAnnoPie(peakAnoo)
