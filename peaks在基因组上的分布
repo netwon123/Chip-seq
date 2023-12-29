@@ -1,4 +1,5 @@
 library(ChIPseeker)
+#需要把narrowpeak里非染色体行删除
 ###peaks在基因组上的分布
 peak.gr <- readPeakFile("~/3_macs/sample_peaks.narrowPeak", as="GRanges")
 pdf("Figure1.sample_distribution of peaks in chrs.pdf")
