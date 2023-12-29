@@ -1,0 +1,31 @@
+#visualed the peak 
+ls *bam | while read id;
+do
+samtools index $id
+bamCoverage -bs 10 --normalizeUsing RPGC --effectiveGenomeSize 2533271056 --extendReads -b ${id} -o ${id}.bw
+done
+
+#--
+  ls *bw | while read id;
+do
+computeMatrix reference-point --referencePoint TSS -p 5 -b 2500 -a 2500 -R ss.refseq.tss.bed -S $id --skipZeros -o ${id}.tss.GZ --outFileSortedRegions ${id}.sample.bed
+done
+
+ls *gz | while read id;
+do
+plotHeatmap -m $id -out ${id}.Heatmap.png
+done
+
+
+  #---calculate cor----------------------
+multiBamSummary bins --bamfiles ./*bam --minMappingQuality 30 -p 5 -out readCounts.npz --outRawCounts readCounts.tab
+plotCorrelation --corData readCounts.npz --corMethod pearson --skipZeros --whatToPlot scatterplot \
+        --plotTitle "Scatterplot-Pearson Correlation of Average Scores" \
+        -o scatterplot_PearsonCorr_bamScores.pdf \
+        --outFileCorMatrix scatPearsonCorr_bamScores.tab
+plotCorrelation --corData readCounts.npz --corMethod pearson --skipZeros --whatToPlot heatmap \
+        --plotTitle "Heatmap-Pearson Correlation of Average Scores" \
+        -o heatmap_PearsonCorr_bamScores.pdf \
+        --colorMap RdYlBu --plotNumbers \
+        --outFileCorMatrix PearsonCorr_bamScores.tab \
+        --removeOutliers
