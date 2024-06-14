@@ -1,0 +1,5 @@
+#bam，基因组文件的染色体名字都要chr开头
+ls  *bam | while read id; do samtools view -H $id | sed -e 's/SN:\([0-9XY]\)/SN:chr\1/' -e 's/SN:MT/SN:chrM/' | samtools reheader - $id > ${id}.chr.bam;done
+
+  #没有官方基因组则自己替换
+  python ROSE_main.py -g SUS11 -i 247-H3K27ac.bam.rmdup.bam.rmM.bam_peaks.gff -r 247-H3K27ac.bam.rmdup.bam.rmM.bam.rn.bam.chr.bam -c NC-1-H3K27ac.bam.rmdup.bam.rmM.bam.rn.bam.chr.bam -o result_247 -s 12500 -t 2500
