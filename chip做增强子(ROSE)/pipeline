@@ -1,7 +1,21 @@
 #bam，基因组文件的染色体名字都要chr开头
 ls  *bam | while read id; do samtools view -H $id | sed -e 's/SN:\([0-9XY]\)/SN:chr\1/' -e 's/SN:MT/SN:chrM/' | samtools reheader - $id > ${id}.chr.bam;done
 
-  #没有官方基因组则自己替换
-  python ROSE_main.py -g SUS11 -i 247-H3K27ac.bam.rmdup.bam.rmM.bam_peaks.gff -r 247-H3K27ac.bam.rmdup.bam.rmM.bam.rn.bam.chr.bam -c NC-1-H3K27ac.bam.rmdup.bam.rmM.bam.rn.bam.chr.bam -o result_247 -s 12500 -t 2500
-  R --no-save result_NC/ result_NC/NC-1-H3K27ac_12KB_STITCHED_TSS_DISTAL_ENHANCER_REGION_MAP.txt NC-1-H3K27ac 247-input.bam.rmdup.bam.rmM.bam.chr.bam < ROSE_callSuper.R
 
+#没有官方基因组则自己替换
+python ROSE_main.py -g SUS11 -i 247-H3K27ac.bam.rmdup.bam.rmM.bam_peaks.gff -r 247-H3K27ac.bam.rmdup.bam.rmM.bam.rn.bam.chr.bam -c NC-1-H3K27ac.bam.rmdup.bam.rmM.bam.rn.bam.chr.bam -o result_247 -s 12500 -t 2500
+R --no-save result_NC/ result_NC/NC-1-H3K27ac_12KB_STITCHED_TSS_DISTAL_ENHANCER_REGION_MAP.txt NC-1-H3K27ac 247-input.bam.rmdup.bam.rmM.bam.chr.bam < ROSE_callSuper.R
+###结果说明
+6..**OUTPUT_DIRECTORY/*_AllEnhancers.table.txt 增强子列表，包含每个增强子的排名和是否为超级增强子，包含以下列：
+（增强子ID，染色体，拼接增强子起始位点，拼接增强子末端，拼接数，拼接成分大小，BAM的信号，BAM的等级，是否为超增强子：是（1）否（0））
+7.**OUTPUT_DIRECTORY/* _SuperEnhancers.table.txt 超级增强子的排名，为*_AllEnhancers.table.txt 文件的子集。包含以下列：
+（拼接增强剂ID，染色体，拼接增强子起始位点，拼接增强子末端，拼接数，缝合在一起的成分的大小，RANKING_BAM的信号，RANKING_BAM的等级，超增强子的二进制（1）与典型（0））
+8.**OUTPUT_DIRECTORY/*_Enhancers_withSuper.bed 可以加载到UCSC浏览器中可视化的增强子bed文件
+9.**OUTPUT_DIRECTORY/*_Plot_points.png 所有增强子散点图，
+
+#注释增强子
+python ROSE_geneMapper.py -i result_NC/NC-1-H3K27ac_AllEnhancers.table.txt  -g SUS11 -o ./result_NC/
+1.**OUTPUT_DIRECTORY/*ENHANCER_TO_GENE.txt enhancer重叠基因、附近基因以及最近的基因列表
+2.**OUTPUT_DIRECTORY/*GENE_TO_ENHANCER.txt 以每个基因为列名的和其相关的增强子位置信息列表
+
+原文链接：https://blog.csdn.net/oxygenjing/article/details/77862115
