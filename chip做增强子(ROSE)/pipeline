@@ -3,3 +3,5 @@ ls  *bam | while read id; do samtools view -H $id | sed -e 's/SN:\([0-9XY]\)/SN:
 
   #没有官方基因组则自己替换
   python ROSE_main.py -g SUS11 -i 247-H3K27ac.bam.rmdup.bam.rmM.bam_peaks.gff -r 247-H3K27ac.bam.rmdup.bam.rmM.bam.rn.bam.chr.bam -c NC-1-H3K27ac.bam.rmdup.bam.rmM.bam.rn.bam.chr.bam -o result_247 -s 12500 -t 2500
+  R --no-save result_NC/ result_NC/NC-1-H3K27ac_12KB_STITCHED_TSS_DISTAL_ENHANCER_REGION_MAP.txt NC-1-H3K27ac 247-input.bam.rmdup.bam.rmM.bam.chr.bam < ROSE_callSuper.R
+
