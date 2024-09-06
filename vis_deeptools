@@ -1,0 +1,31 @@
+#single plot
+ls *bw | while read id;
+do
+computeMatrix reference-point -p 10 --binSize 50  --referencePoint TSS -a 3000 -b 3000 \
+-R mm10.ensGene.gtf -S $id --skipZeros -o ${id}_combine-scaleRegion-data.gz
+done
+
+ls *data.gz | while read id;
+do
+plotHeatmap -m $id \
+            --missingDataColor 1 \
+            --colorList 'white,#339933' \
+            --heatmapHeight 12 \
+            -o ${id}-heatmap.pdf
+done
+
+#=======================================================
+#=======================================================
+#multi plot
+
+computeMatrix reference-point -p 10 --binSize 50  --referencePoint TSS -a 3000 -b 3000 \
+-R mm10.ensGene.gtf -S 1.bw 2.bw ... x.bw  --skipZeros -o combine-scaleRegion-data.gz
+
+plotHeatmap -m combine-scaleRegion-data.gz \
+            --missingDataColor 1 \
+            --colorList 'white,#339933' \
+            --heatmapHeight 12 \
+            -o combine-heatmap.pdf
+
+
+#修改--binSize可以改变曲线平滑度
