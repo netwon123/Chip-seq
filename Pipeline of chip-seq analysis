@@ -9,6 +9,9 @@
 #bowtie2 -p 16 -q -X 1000 --dovetail --no-unal --very-sensitive-local --no-mixed --no-discordant \
 #-x genome/Duroc -1 180-EP300_1_clean2.fq.gz -2 180-EP300_2_clean2.fq.gz 2>EP300.alignment.summary | samtools view -F 4 -u - | samtools sort -@ 16 -o EP300.bam
 
+#---get the unique alignmemnt
+cat aligned.sam | perl -ne “print if /^@|NH:i:1\b/”
+
 #bowtie2 -p 16 -q -X 1000 --dovetail --no-unal --very-sensitive-local --no-mixed --no-discordant \
 #-x genome/Duroc -1 180-EZH2_1_clean2.fq.gz -2 180-EZH2_2_clean2.fq.gz 2>180-EZH2.alignment.summary | samtools view -F 4 -u - | samtools sort -@ 16 -o EZH2.bam
 #samtools view EP300.bam |  awk -F'\t' 'function abs(x){return ((x < 0.0) ? -x : x)} {print $1"\t"abs($9)}' |  sort | uniq | cut -f2 > EP300_fragment.length.txt
