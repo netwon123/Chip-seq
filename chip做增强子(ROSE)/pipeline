@@ -1,3 +1,12 @@
+
+vi ~/.bashrc
+PATHTO=/public/home/baoqi/project_qu_chip/ROSE-1.3.2
+PYTHONPATH=$PATHTO/lib
+export PYTHONPATH
+export PATH=$PATH:$PATHTO/bin
+:wq!
+
+
 ls *narrowPeak |while read id;do awk '{print "chr"$1,$4," ",$2,$3," ","."," ",$4}' $id > ${id}.gff;done
 
 #bam，基因组文件的染色体名字都要chr开头
