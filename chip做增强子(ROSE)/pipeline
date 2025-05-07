@@ -1,3 +1,5 @@
+ls *narrowPeak |while read id;do awk '{print "chr"$1,$4," ",$2,$3," ","."," ",$4}' $id > ${id}.gff;done
+
 #bam，基因组文件的染色体名字都要chr开头
 ls  *bam | while read id; do samtools view -H $id | sed -e 's/SN:\([0-9XY]\)/SN:chr\1/' -e 's/SN:MT/SN:chrM/' | samtools reheader - $id > ${id}.chr.bam;done
 
