@@ -44,3 +44,4 @@ bash cal_FRiP.sh
 
 #bwg → bw
 wget http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/bedGraphToBigWig
+bedGraphToBigWig  SRR3033154.bedgraph  $REF.fai  SRR3033154.bw
