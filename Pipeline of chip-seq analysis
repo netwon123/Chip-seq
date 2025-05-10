@@ -1,7 +1,11 @@
 #---QC----不对长度进行过滤，使用-L
 #fastqc -t 8 *.fq.gz -o ./
-#fastp -w 8 -L -i 180-EP300_1.fq.gz -o 180-EP300_1_clean2.fq.gz -I 180-EP300_2.fq.gz -O 180-EP300_2_clean2.fq.gz
-#fastp -w 8 -L -i 180-EZH2_1.fq.gz -o 180-EZH2_1_clean2.fq.gz -I 180-EZH2_2.fq.gz -O 180-EZH2_2_clean2.fq.gz
+ls ./*fq.gz | while read i;
+do
+i=${i/_1.fq.gz/}
+fastp -w 56 -L -i ${i}_1.fq.gz -o ${i}_1_clean.fq.gz -I ${i}_2.fq.gz -O ${i}_2_clean.fq.gz
+done
+
 #fastqc -t 8 *clean2.fq.gz -o ./
 
 #---比对----
