@@ -24,8 +24,11 @@ done
 #samtools view EZH2.bam |  awk -F'\t' 'function abs(x){return ((x < 0.0) ? -x : x)} {print $1"\t"abs($9)}' |  sort | uniq | cut -f2 > EZH2_fragment.length.txt
 
 #---去重----
-#ava -jar ~/software/picard.jar MarkDuplicates -I ../EP300.bam -O EP300.rmdup.bam --REMOVE_SEQUENCING_DUPLICATES true -M EP300.log
-#ava -jar ~/software/picard.jar MarkDuplicates -I ../EZH2.bam -O EZH2.rmdup.bam --REMOVE_SEQUENCING_DUPLICATES true -M EZH2.log
+ls *bam | while read id;
+do
+java -jar ~/software/picard.jar MarkDuplicates -I $id -O ${id}.rmdup.bam --REMOVE_SEQUENCING_DUPLICATES true -M EP300.log
+done
+
 
 #---去线粒体----
 #amtools view -h EP300.rmdup.bam | grep -v 'NC_000845.1' | samtools view -bS -o EP300.rmdup.rmM.bam
@@ -33,8 +36,11 @@ done
 
 #---no model---
 #在peak calling时，需要添加-B参数，这样才可以输出样本对应的bedgraph文件，同时需要保证peak  calling时采用一致的--extsize的值，就是第一步预测出来的数值，取多个样本的均值即可。官方也给出了推荐值，对于大多数的转录因子chip_seq数据，推荐值为200， 对于大部分组蛋白修饰的chip_seq数据，推荐值为147
-macs3 callpeak -g 2533271056 -t EP300.rmdup.rmM.bam -f BAMPE -n EP300 -B --SPMR --keep-dup all --nomodel --extsize 200
-macs3 callpeak -g 2533271056 -t EZH2.rmdup.rmM.bam -f BAMPE -n EZH2 -B --SPMR --keep-dup all --nomodel --extsize 200
+ls *rmdup.bam | while read id;
+do
+macs3 callpeak -g 2533271056 -t $id -f BAMPE -n ${id} -B --SPMR --keep-dup all --nomodel --extsize 200
+done
+
 #163 129 macs2 predictd -i input.bam
 
 #假如是处理对照组，只有1个样本，可使用bdgdiff
