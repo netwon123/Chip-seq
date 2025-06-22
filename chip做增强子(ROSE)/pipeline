@@ -25,7 +25,7 @@ python ROSE_main.py -g SUS11 -i 247-H3K27ac.bam.rmdup.bam.rmM.bam_peaks.gff -r 2
 9.**OUTPUT_DIRECTORY/*_Plot_points.png 所有增强子散点图，
 
 #注释增强子
-python ROSE_geneMapper.py -i result_NC/NC-1-H3K27ac_AllEnhancers.table.txt  -g SUS11 -o ./result_NC/
+python ROSE_geneMapper.py -i result_NC/NC-1-H3K27ac_AllEnhancers.table.txt  -g SUS11 -o ./result_NC/ -r
 1.**OUTPUT_DIRECTORY/*ENHANCER_TO_GENE.txt enhancer重叠基因、附近基因以及最近的基因列表
 2.**OUTPUT_DIRECTORY/*GENE_TO_ENHANCER.txt 以每个基因为列名的和其相关的增强子位置信息列表
 
